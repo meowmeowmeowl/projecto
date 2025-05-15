@@ -5,11 +5,19 @@
 #include <vector>
 #include <algorithm>
 #include <cstdlib> 
+//#include "changeparams.h"
 #include "Action.h"
 #include <cstdlib>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Rect.hpp>
+const std::unordered_map<int, std::string > conver = {
+		{0, "son"},
+		{1, "talk"},
+		{2, "mental"},
+		{3, "bot"},
+		{4, "body"}
+};
 void sleep(Action* meow) {
 	Character* student = meow->stud;
 	if (student == nullptr) {
@@ -33,7 +41,7 @@ void bot(Action* meow) {
 	student->physic.showprogress();
 	student->math.showprogress();
 	student->proga.showprogress();
-	
+
 
 }
 void care(Action* meow) {
@@ -46,7 +54,7 @@ void care(Action* meow) {
 	meow->pressthebutton();
 	student->showstats();
 }
-	
+
 void talk(Action* meow) {
 	Character* student = meow->stud;
 	if (student == nullptr) {
@@ -79,7 +87,9 @@ void pe(Action* meow) {
 	student->pe.showprogress();
 }
 
-void processNumber(int number, Action* meow) {
+
+void processNumber(int number, Action* meow, std::vector<sf::RectangleShape> barprogress) {
+	Character* student = meow->stud;
 	if (number == 1) {
 		sleep(meow);
 	}
@@ -98,6 +108,7 @@ void processNumber(int number, Action* meow) {
 	else {
 		pe(meow);
 	}
+	
 }
 int main() {
 		// Создаем окно
@@ -109,7 +120,49 @@ int main() {
 			return -1;
 		}
 		// Загружаем шрифт
+		//ДЕЛАЕМ ШКАЛЫ ДЛЯ БОТА ПРЕДМЕТОВ
+		const float subWidth = 100.f;
+		const float subHeight = 30.f;
+		const float paddingsub = 20.f;
+		std::vector<int> subnumber = { 1,2,3};
+		std::vector<sf::RectangleShape> subbackground;
+		std::vector<sf::RectangleShape> subprogress;
+		const float startYsub = ((subnumber.size() * subHeight + (subnumber.size() - 1) * paddingsub)) / 2.f;
+		const float startXsub = 0.f;
+		for (size_t i = 0; i < subnumber.size(); ++i) {
+			sf::RectangleShape background(sf::Vector2f(subWidth, subHeight));
+			background.setFillColor(sf::Color(255, 200, 0));
+			background.setPosition({ startXsub,  i * (subHeight + paddingsub) + startYsub }); // Позиция шкалы
+			sf::RectangleShape progresssub(sf::Vector2f(0.f, subHeight)); // Начальная ширина 0
+			progresssub.setFillColor(sf::Color(0, 255, 0)); // Зеленый цвет
+			progresssub.setPosition({ startXsub, i * (subHeight + paddingsub) + startYsub });
+			subbackground.push_back(background);
+			subprogress.push_back(progresssub);
+		}
 
+		//ДЕЛАЕМ ШКАЛЫ ДЛЯ ПАРАМЕТРОВ
+		
+		const float barWidth = 200.f;
+		const float barHeight = 30.f;
+		const float paddingBar = 20.f;
+		std::vector<int> barsnumber = { 1,2,3,4,5 };
+		std::vector<sf::RectangleShape> barbackground;
+		std::vector<sf::RectangleShape> barprogress;
+		const float startYbar = (800 - (barsnumber.size() * barHeight + (barsnumber.size() - 1) * paddingBar)) / 2.f;
+		const float startXbar = 0.f;
+		for (size_t i = 0; i < barsnumber.size(); ++i) {
+			sf::RectangleShape background(sf::Vector2f(barWidth, barHeight));
+			background.setFillColor(sf::Color(255, 255, 255)); 
+			background.setPosition({ startXbar,  i * (barHeight + paddingBar)+  startYbar }); // Позиция шкалы
+			sf::RectangleShape progressBar(sf::Vector2f(0.f, barHeight)); // Начальная ширина 0
+			progressBar.setFillColor(sf::Color(0, 255, 0)); // Зеленый цвет
+			progressBar.setPosition({ startXbar , i * (barHeight + paddingBar) + startYbar });
+			barbackground.push_back(background);
+			barprogress.push_back(progressBar
+);
+
+		}
+		//ДЕЛАЕМ КНОПОЧКИ
 
 		// Числа для наших кнопок
 		std::vector<int> numbers = { 1, 2, 3, 4, 5, 6 };
@@ -209,8 +262,24 @@ int main() {
 
 					for (size_t i = 0; i < buttons.size(); ++i) {
 						if (buttons[i].getGlobalBounds().contains(mousePos)) {
-							processNumber(numbers[i], &activebody); // Вызываем функцию с числом
+							processNumber(numbers[i], &activebody, barprogress); // Вызываем функцию с числом
+							for (int i = 0; i < 5; ++i) {
+								int num = activebody.stud->stats.at(conver.at(i));
+								barprogress[i].setSize(sf::Vector2f(barWidth * (num / 100.0f), barHeight)); // Пример  прогресса
+								window.draw(barprogress[i]);
 
+							}
+							if (numbers[i] == 2) {
+								int physic = activebody.stud->physic.value;
+								subprogress[0].setSize(sf::Vector2f(subWidth * (physic / 100.0f), subHeight)); // Пример  прогресса
+								window.draw(subprogress[0]);
+								int math = activebody.stud->math.value;
+								subprogress[1].setSize(sf::Vector2f(subWidth * (math / 100.0f), subHeight)); // Пример  прогресса
+								window.draw(subprogress[1]);
+								int proga = activebody.stud->proga.value;
+								subprogress[2].setSize(sf::Vector2f(subWidth * (proga/ 100.0f), subHeight)); // Пример  прогресса
+								window.draw(subprogress[2]);
+							}
 						}
 					}
 					// left mouse button is pressed: shoot
@@ -236,7 +305,22 @@ int main() {
 
 			// Отрисовка
 			window.clear(sf::Color(50, 50, 50)); // Темный фон
+			//Рисуем шкалы предметов
+			for (size_t i = 0; i < subnumber.size(); ++i) {
+				window.draw(subbackground[i]);
+				window.draw(subprogress[i]);
+			}
+			// Рисуем шкалы параметров
+			for (size_t i = 0; i < barsnumber.size(); ++i) {
+				window.draw(barbackground[i]);
+				for (int i = 0; i < 5; ++i) {
+					int num = activebody.stud->stats.at(conver.at(i));
+					barprogress[i].setSize(sf::Vector2f(barWidth * (num / 100.0f), barHeight)); // Пример  прогресса
+					window.draw(barprogress[i]);
 
+				}
+
+			}
 			// Рисуем кнопки и текст
 			for (size_t i = 0; i < buttons.size(); ++i) {
 				window.draw(buttons[i]);
