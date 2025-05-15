@@ -2,6 +2,12 @@
 #define YOUDEAD
 
 void youdead(std::string reason, Character* stud) {
+	std::cout << "you know it is the end of the game any lasts words" << std::endl;
+	std::string answer;
+	std::cin >> answer;;
+	if (answer == "refuse") {
+		return;
+	}
 	if (reason == "pe") {
 		//показать что вы умерли из за непосещаемости физры
 		std::cout << "no fan of sport" << std::endl;

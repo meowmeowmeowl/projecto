@@ -12,14 +12,15 @@ struct Study {
 
     virtual bool task() { return 1; }
   virtual void makeoperation(int k, bool f) {
-      if (task()) {
-      value = value + change * (1 + k / 100.0f);
-      if (f) { value = 1.1 * value; }
-      if (value > maxx) {
-          value = maxx;
+      bool tas = task();
+      if (tas) {
+          value = value + change * (1 + k / 100.0f);
+          if (f) { value = 1.1 * value; }
+          if (value > maxx) {
+              value = maxx;
+          }
       }
   }
-}
 //вспомогательное
 virtual void showprogress() {
 }
@@ -45,6 +46,7 @@ struct Physic:Study {
         std::cout << "you failed sorry bro"<<std::endl;
         return 0;
     }
+
 };
 struct Proga :Study {
     Proga() {
@@ -84,6 +86,16 @@ struct Math:Study {
         }
         std::cout << "you failed sorry bro";
         return 0;
+    }
+    void makeoperation(int k, bool f) {
+        bool tas = task();
+        if (tas) {
+            value = value + change * (1 + k / 100.0f);
+            if (f) { value = 1.1 * value; }
+            if (value > maxx) {
+                value = maxx;
+            }
+        }
     }
 
 };

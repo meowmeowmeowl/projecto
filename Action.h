@@ -43,6 +43,33 @@ struct Action {
 		}
 		stud->math.value = 0;
 	}
+	void checkprivilege() {
+		std::unordered_map<std::string, int> priv;
+		priv["physic"] = stud->achieve.numbers[0];
+		priv["math"] = stud->achieve.numbers[1];
+		priv["proga"] = stud->achieve.numbers[2];
+		std::vector<std::string> arezero;
+		for (const auto& pair : priv) {
+			if (pair.second == 0) {
+				arezero.push_back(pair.first);
+			}
+		}
+		if (!arezero.empty()) {
+			std::cout << "you can improve your bot for subject if you pass it" << std::endl;
+			int randomIndex = std::rand() % arezero.size();
+			std::string subject = arezero[randomIndex];
+			if (subject == "physic") {
+				stud->achieve.physicEnjoyer();
+			}
+			else if (subject == "math") {
+				stud->achieve.mathEnjoyer();
+			}
+			else {
+				stud->achieve.progaEnjoyer();
+			}
+
+		}
+	}
 	void semester() {
 		std::cout << "o no end of semester" << std::endl;
 		if (stud->pe.value != stud->pe.maxx) {
@@ -53,10 +80,16 @@ struct Action {
 	void pressthebutton() {
 		isalive();
 		number_action += 1;
-		if (number_action ==1) {
+		if (number_action ==3) {
 			days += 1;
 			number_action = 0;
+			std::cout << "It is a new day" << "\n" << std::endl;
+
 			int count = std::count(important_days.begin(), important_days.end(), days);
+			int cou = std::count(achievement_days.begin(), achievement_days.end(), days);
+			if (cou > 0) {
+				checkprivilege();
+			}
 			if (count > 0) {
 				checkday();
 			}
