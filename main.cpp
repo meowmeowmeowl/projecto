@@ -162,30 +162,24 @@ int main() {
         buttonTexts.push_back(text);
     }
 
-    // Кнопки выбора предмета для изучения
-    bool showStudyMenu = false;
-    std::vector<sf::RectangleShape> studyButtons;
-    std::vector<sf::Text> studyButtonTexts;
-    std::vector<std::string> studyLabels = { "Physics", "Math", "Proga" };
-    const float studyButtonWidth = 100.f;
-    const float studyButtonHeight = 50.f;
-    const float studyStartX = (800 - (3 * studyButtonWidth + 2 * padding)) / 2.f;
-    const float studyStartY = 300.f;
-    for (size_t i = 0; i < 3; ++i) {
-        sf::RectangleShape button(sf::Vector2f(studyButtonWidth, studyButtonHeight));
-        button.setPosition({ studyStartX + i * (studyButtonWidth + padding), studyStartY });
-        button.setFillColor(sf::Color(253, 246, 171));
-        button.setOutlineThickness(2.f);
-        button.setOutlineColor(sf::Color::Black);
-        studyButtons.push_back(button);
-
-        sf::Text text(font);
-        text.setString(studyLabels[i]);
-        text.setCharacterSize(20);
-        text.setFillColor(sf::Color::Black);
-        text.setPosition({ studyStartX + i * (studyButtonWidth + padding) + 10.f, studyStartY + 15.f });
-        studyButtonTexts.push_back(text);
-    }
+    // Текстовое поле для ввода
+    bool showTextField = false;
+    std::string inputText = "";
+    sf::RectangleShape textField(sf::Vector2f(100.f, 30.f));
+    textField.setPosition({ 350.f, 350.f });
+    textField.setFillColor(sf::Color(255, 255, 255));
+    textField.setOutlineThickness(2.f);
+    textField.setOutlineColor(sf::Color::Black);
+    sf::Text inputTextDisplay(font);
+    inputTextDisplay.setString("");
+    inputTextDisplay.setCharacterSize(20);
+    inputTextDisplay.setFillColor(sf::Color::Black);
+    inputTextDisplay.setPosition({ 360.f, 355.f });
+    sf::Text questionText(font);
+    questionText.setString("");
+    questionText.setCharacterSize(16);
+    questionText.setFillColor(sf::Color::White);
+    questionText.setPosition({ 200.f, 300.f });
 
     // Область для сообщений
     sf::Text statusMessage(font);
@@ -194,72 +188,110 @@ int main() {
     statusMessage.setFillColor(sf::Color::White);
     statusMessage.setPosition({ 200.f, 50.f });
     float messageTimer = 0.f;
-    const float messageDuration = 3.f; // Сообщение видно 3 секунды
+    const float messageDuration = 3.f;
 
     // Создаем персонажа
     Intro intro(window, font, fontexture);
     Character* someperson = intro.run();
-    if (!someperson) return 0; // Выход, если окно закрыто
+    // if (!someperson) return 0;
     Action activebody(someperson);
+
+    // Состояние для вопросов
+    enum class InputState { None, Study, Achievement };
+    InputState inputState = InputState::None;
+    std::string achievementSubject = "";
 
     // Главный цикл приложения
     bool mouseWasPressed = false;
-    int selectedSubject = 0; // 1: Physics, 2: Math, 3: Proga
-
     while (window.isOpen()) {
-        // Обработка событий
-        while (const std::optional event = window.pollEvent()) {
+		while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
-                window.close();
-            }
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
-                mouseWasPressed = true;
-            }
-            if (event->is<sf::Event::MouseButtonReleased>() && mouseWasPressed) {
-                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                if (showStudyMenu) {
-                    for (size_t i = 0; i < studyButtons.size(); ++i) {
-                        if (studyButtons[i].getGlobalBounds().contains(mousePos)) {
-                            selectedSubject = i + 1; // 1: Physics, 2: Math, 3: Proga
-                            showStudyMenu = false;
-                            // Выполняем действие изучения
-                            if (selectedSubject == 1) {
-                                activebody.stud->physic.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[0]);
-                            } else if (selectedSubject == 2) {
-                                activebody.stud->math.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[1]);
-                            } else {
-                                activebody.stud->proga.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[2]);
-                            }
-                            std::vector<int> studyParams;
-                            if (dynamic_cast<Botenjoyer*>(activebody.stud)) {
-                                studyParams = { -10, 0, 10, 30, -10 };
-                            } else if (dynamic_cast<Chillguy*>(activebody.stud)) {
-                                studyParams = { -10, 10, 0, -10, 0 };
-                            } else {
-                                studyParams = { -10, 10, -10, 0, -10 };
-                            }
-                            activebody.stud->action(studyParams);
-                            activebody.pressthebutton();
-                            statusMessage.setString("Studied " + studyLabels[i]);
-                            messageTimer = messageDuration;
-                        }
-                    }
-                } else {
-                    for (size_t i = 0; i < buttons.size(); ++i) {
-                        if (buttons[i].getGlobalBounds().contains(mousePos)) {
-                            if (numbers[i] == 2) { // Study
-                                showStudyMenu = true;
-                            } else {
-                                processNumber(numbers[i], &activebody);
-                                statusMessage.setString("Performed " + actionLabels[i]);
-                                messageTimer = messageDuration;
-                            }
-                        }
-                    }
-                }
-                mouseWasPressed = false;
-            }
+				window.close();
+			}
+			if (showTextField && event->is<sf::Event::TextEntered>()) {
+				const auto* textentered = event->getIf<sf::Event::TextEntered>();
+				if (textentered->unicode >= '0' && textentered->unicode <= '3') {
+					inputText = static_cast<char>(textentered->unicode);
+					inputTextDisplay.setString(inputText);
+				} else if (textentered->unicode == 8 && !inputText.empty()) { // Backspace
+					inputText.clear();
+					inputTextDisplay.setString("");
+				}
+			}
+			if (showTextField && event->is<sf::Event::KeyPressed>()) {
+				const auto* keypressed = event->getIf<sf::Event::KeyPressed>();
+				if (keypressed->code == sf::Keyboard::Key::Enter && !inputText.empty()) {
+					int input = std::stoi(inputText);
+					if (inputState == InputState::Study) {
+						if (input >= 1 && input <= 3) {
+							if (input == 1) {
+								activebody.stud->physic.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[0]);
+							} else if (input == 2) {
+								activebody.stud->math.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[1]);
+							} else {
+								activebody.stud->proga.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[2]);
+							}
+							std::vector<int> studyParams;
+							if (dynamic_cast<Botenjoyer*>(activebody.stud)) {
+								studyParams = { -10, 0, 10, 30, -10 };
+							} else if (dynamic_cast<Chillguy*>(activebody.stud)) {
+								studyParams = { -10, 10, 0, -10, 0 };
+							} else {
+								studyParams = { -10, 10, -10, 0, -10 };
+							}
+							activebody.stud->action(studyParams);
+							activebody.pressthebutton();
+							statusMessage.setString("Studied " + subjects[input]);
+							messageTimer = messageDuration;
+						}
+					} else if (inputState == InputState::Achievement) {
+						if (input == 1) {
+							if (achievementSubject == "physic") {
+								activebody.stud->achieve.numbers[0] = 1;
+								statusMessage.setString("Improved physics");
+							} else if (achievementSubject == "math") {
+								activebody.stud->achieve.numbers[1] = 1;
+								statusMessage.setString("Improved math");
+							} else if (achievementSubject == "proga") {
+								activebody.stud->achieve.numbers[2] = 1;
+								statusMessage.setString("Improved programming");
+							}
+						} else {
+							statusMessage.setString("Skipped improvement");
+						}
+						messageTimer = messageDuration;
+					}
+					showTextField = false;
+					inputText.clear();
+					inputTextDisplay.setString("");
+					inputState = InputState::None;
+				}
+			}
+			if (event->is<sf::Event::MouseButtonPressed>() && event->getIf<sf::Event::MouseButtonPressed>()->button == sf::Mouse::Button::Left) {
+				mouseWasPressed = true;
+			}
+			if (event->is<sf::Event::MouseButtonReleased>() && mouseWasPressed) {
+				const auto* mousereleased = event->getIf<sf::Event::MouseButtonReleased>();
+				sf::Vector2f mousePos = window.mapPixelToCoords(sf::Vector2i(mousereleased->position.x, mousereleased->position.y));
+				if (!showTextField) {
+					for (size_t i = 0; i < buttons.size(); ++i) {
+						if (buttons[i].getGlobalBounds().contains(mousePos)) {
+							if (numbers[i] == 2) { // Study
+								showTextField = true;
+								inputState = InputState::Study;
+								questionText.setString("Choose subject (1: Physics, 2: Math, 3: Proga)");
+							} else {
+								processNumber(numbers[i], &activebody);
+								statusMessage.setString("Performed " + actionLabels[i]);
+								messageTimer = messageDuration;
+							}
+						}
+					}
+				}
+				mouseWasPressed = false;
+			}
         }
+        
 
         // Обновление сообщений
         if (messageTimer > 0) {
@@ -269,14 +301,34 @@ int main() {
             }
         }
 
-        // Проверка событий дня
+        // Проверка событий дня и достижений
         if (activebody.number_action == 0 && activebody.days > 0) {
             statusMessage.setString("It is a new day");
             messageTimer = messageDuration;
             int count = std::count(activebody.important_days.begin(), activebody.important_days.end(), activebody.days);
+            int cou = std::count(activebody.achievement_days.begin(), activebody.achievement_days.end(), activebody.days);
             if (count > 0) {
                 statusMessage.setString("Deadline uiuiui");
                 messageTimer = messageDuration;
+            }
+            if (cou > 0 && !showTextField) {
+                std::unordered_map<std::string, int> priv;
+                priv["physic"] = activebody.stud->achieve.numbers[0];
+                priv["math"] = activebody.stud->achieve.numbers[1];
+                priv["proga"] = activebody.stud->achieve.numbers[2];
+                std::vector<std::string> arezero;
+                for (const auto& pair : priv) {
+                    if (pair.second == 0) {
+                        arezero.push_back(pair.first);
+                    }
+                }
+                if (!arezero.empty()) {
+                    int randomIndex = std::rand() % arezero.size();
+                    achievementSubject = arezero[randomIndex];
+                    showTextField = true;
+                    inputState = InputState::Achievement;
+                    questionText.setString("Improve " + achievementSubject + "? (1: Yes, 0: No)");
+                }
             }
         }
 
@@ -284,11 +336,6 @@ int main() {
         sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         for (size_t i = 0; i < buttons.size(); ++i) {
             buttons[i].setFillColor(buttons[i].getGlobalBounds().contains(mousePos) ? sf::Color(200, 192, 98) : sf::Color(253, 246, 171));
-        }
-        if (showStudyMenu) {
-            for (size_t i = 0; i < studyButtons.size(); ++i) {
-                studyButtons[i].setFillColor(studyButtons[i].getGlobalBounds().contains(mousePos) ? sf::Color(200, 192, 98) : sf::Color(253, 246, 171));
-            }
         }
 
         // Обновление UI
@@ -332,11 +379,10 @@ int main() {
         for (const auto& statText : statTexts) {
             window.draw(statText);
         }
-        if (showStudyMenu) {
-            for (size_t i = 0; i < studyButtons.size(); ++i) {
-                window.draw(studyButtons[i]);
-                window.draw(studyButtonTexts[i]);
-            }
+        if (showTextField) {
+            window.draw(questionText);
+            window.draw(textField);
+            window.draw(inputTextDisplay);
         }
         if (messageTimer > 0) {
             window.draw(statusMessage);
