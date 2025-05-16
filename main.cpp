@@ -178,7 +178,7 @@ int main() {
 
 		//создаем персонажа
 
-		Intro intro(window);
+		Intro intro(window, font, fontexture);
 		
 
 		Character* someperson = intro.run();
