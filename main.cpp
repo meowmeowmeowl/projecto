@@ -11,23 +11,27 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Rect.hpp>
+#include "Intro.h"
+
+
 int main() {
-		// Создаем окно
+		// РЎРѕР·РґР°РµРј РѕРєРЅРѕ
 		sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "My window");
 		sf::Texture fontexture;
-		//фон
-		if (!fontexture.loadFromFile("C:/Users/Мария/source/repos/with_sfml/fon.jpg")) {
+		//С„РѕРЅ
+		if (!fontexture.loadFromFile("background.png")) {
+			std::cerr << "Failed to load background!" << std::endl;
 			return -1;
 		}
 		sf::Sprite backgroundSprite(fontexture);
 		sf::Vector2u sizepicture = fontexture.getSize();
-		//sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Кнопки с числами");
+		//sf::RenderWindow window(sf::VideoMode(800, 600), "SFML РљРЅРѕРїРєРё СЃ С‡РёСЃР»Р°РјРё");
 		sf::Font font;
-		if (!font.openFromFile("C:/Users/Мария/source/repos/with_sfml/arialmt.ttf")) { //помните что путь до файла свой везде
+		if (!font.openFromFile("arial.ttf")) { //РїРѕРјРЅРёС‚Рµ С‡С‚Рѕ РїСѓС‚СЊ РґРѕ С„Р°Р№Р»Р° СЃРІРѕР№ РІРµР·РґРµ
 			std::cerr << "Failed to load font!" << std::endl;
 			return -1;
 		}
-		//ДЕЛАЕМ ШКАЛЫ ДЛЯ БОТА ПРЕДМЕТОВ
+		//Р”Р•Р›РђР•Рњ РЁРљРђР›Р« Р”Р›РЇ Р‘РћРўРђ РџР Р•Р”РњР•РўРћР’
 
 		const float subWidth = 100.f;
 		const float subHeight = 15.f;
@@ -49,8 +53,8 @@ int main() {
 			background.setFillColor(sf::Color(200, 200, 200));
 			background.setOutlineThickness(2.f);
 			background.setOutlineColor(sf::Color::Black);
-			background.setPosition({ startXsub,  i * (subHeight + paddingsub) + startYsub }); // Позиция шкалы
-			sf::RectangleShape progresssub(sf::Vector2f(0.f, subHeight)); // Начальная ширина 0
+			background.setPosition({ startXsub,  i * (subHeight + paddingsub) + startYsub }); // РџРѕР·РёС†РёСЏ С€РєР°Р»С‹
+			sf::RectangleShape progresssub(sf::Vector2f(0.f, subHeight)); // РќР°С‡Р°Р»СЊРЅР°СЏ С€РёСЂРёРЅР° 0
 			progresssub.setFillColor(sf::Color(8,32,132)); 
 			progresssub.setPosition({ startXsub, i * (subHeight + paddingsub) + startYsub });
 			text.setPosition({ background.getPosition().x,background.getPosition().y - background.getSize().y});
@@ -59,7 +63,7 @@ int main() {
 			subprogress.push_back(progresssub);
 
 		}
-		//ОСОБАЯ КНОПКА ПОДСЧЕТА ДНЕЙ
+		//РћРЎРћР‘РђРЇ РљРќРћРџРљРђ РџРћР”РЎР§Р•РўРђ Р”РќР•Р™
 		const float dayWidth = 60.f;
 		const float dayHeight = 20.f;
 		sf::RectangleShape daybutton(sf::Vector2f(dayWidth, dayHeight));
@@ -73,7 +77,7 @@ int main() {
 		daytext.setFillColor(sf::Color::Black);
 		daytext.setPosition({ daybutton.getPosition().x  - 6.f + daybutton.getSize().y / 2.f,daybutton.getPosition().y + daybutton.getSize().y / 2.f  - 6.f});
 
-		//ОСОБАЯ КНОПКА ДЛЯ ФИЗРЫ
+		//РћРЎРћР‘РђРЇ РљРќРћРџРљРђ Р”Р›РЇ Р¤РР—Р Р«
 		const float peWidth = 40.f;
 		const float peHeight = 30.f;
 		sf::RectangleShape pebutton(sf::Vector2f(peWidth, peHeight));
@@ -93,7 +97,7 @@ int main() {
 		petext.setCharacterSize(14);
 		petext.setFillColor(sf::Color::Black);
 		petext.setPosition({ pebutton.getPosition().x+ pebutton.getSize().y/2.f,pebutton.getPosition().y + pebutton.getSize().y/2.f});
-		//ДЕЛАЕМ ШКАЛЫ ДЛЯ ПАРАМЕТРОВ
+		//Р”Р•Р›РђР•Рњ РЁРљРђР›Р« Р”Р›РЇ РџРђР РђРњР•РўР РћР’
 		
 		const float barWidth = 150.f;
 		const float barHeight = 20.f;
@@ -115,8 +119,8 @@ int main() {
 			backgroundA.setFillColor(sf::Color(255, 255, 255)); 
 			backgroundA.setOutlineThickness(2.f);
 			backgroundA.setOutlineColor(sf::Color::Black);
-			backgroundA.setPosition({ startXbar,  i * (barHeight + paddingBar)+  startYbar }); // Позиция шкалы
-			sf::RectangleShape progressBar(sf::Vector2f(0.f, barHeight)); // Начальная ширина 0
+			backgroundA.setPosition({ startXbar,  i * (barHeight + paddingBar)+  startYbar }); // РџРѕР·РёС†РёСЏ С€РєР°Р»С‹
+			sf::RectangleShape progressBar(sf::Vector2f(0.f, barHeight)); // РќР°С‡Р°Р»СЊРЅР°СЏ С€РёСЂРёРЅР° 0
 			progressBar.setFillColor(sf::Color(8, 32, 132)); // 
 			progressBar.setPosition({ startXbar , i * (barHeight + paddingBar) + startYbar });
 			text.setPosition({ backgroundA.getPosition().x,backgroundA.getPosition().y - backgroundA.getSize().y + 2.f });
@@ -125,7 +129,7 @@ int main() {
 			barprogress.push_back(progressBar);
 
 		}
-		//ДЕЛАЕМ КНОПОЧКИ
+		//Р”Р•Р›РђР•Рњ РљРќРћРџРћР§РљР
 
 		std::vector<int> numbers = { 1, 2, 3, 4, 5, 6};
 		std::vector<sf::RectangleShape> buttons;
@@ -136,7 +140,7 @@ int main() {
 		const float startX = (800 - (numbers.size() * buttonWidth + (numbers.size() - 1) * padding)) / 2.f;
 		const float startY = 530.f;
 		for (size_t i = 0; i < numbers.size(); ++i) {
-			// Создаем прямоугольник кнопки
+			// РЎРѕР·РґР°РµРј РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє РєРЅРѕРїРєРё
 			sf::RectangleShape button(sf::Vector2f(buttonWidth, buttonHeight));
 			button.setPosition({ startX + i * (buttonWidth + padding), startY });
 			button.setFillColor(sf::Color::Green);
@@ -144,7 +148,7 @@ int main() {
 			button.setOutlineColor(sf::Color::Black);
 			buttons.push_back(button);
 
-			// Создаем текст для кнопки
+			// РЎРѕР·РґР°РµРј С‚РµРєСЃС‚ РґР»СЏ РєРЅРѕРїРєРё
 			sf::Text text(font);
 			text.setString(std::to_string(numbers[i]));
 			text.setFont(font);
@@ -171,24 +175,31 @@ int main() {
 
 
 		}
-		//создаем персонажа
-		Character* someperson;
-		std::cout << "Choose your fighter:" << "\n" << "press 1 if you like bot" << "\n" << "press 2 if you are just a chill guy" << "\n" << "press 3 if you are average" << std::endl;
-		int player;
-		std::cin >> player;
-		if (player == 1) {
-			someperson = new Botenjoyer;
-		}
-		else if (player == 2) {
-			someperson = new Chillguy;
-		}
-		else {
-			someperson = new Average;
-		}
+
+		//СЃРѕР·РґР°РµРј РїРµСЂСЃРѕРЅР°Р¶Р°
+
+		Intro intro(window);
+		
+
+		Character* someperson = intro.run();
+
+
+		// std::cout << "Choose your fighter:" << "\n" << "press 1 if you like bot" << "\n" << "press 2 if you are just a chill guy" << "\n" << "press 3 if you are average" << std::endl;
+		// int player;
+		// std::cin >> player;
+		// if (player == 1) {
+		// 	someperson = new Botenjoyer;
+		// }
+		// else if (player == 2) {
+		// 	someperson = new Chillguy;
+		// }
+		// else {
+		// 	someperson = new Average;
+		// }
 		someperson->showstats();
 		Action activebody(someperson);
 
-		// Главный цикл приложения
+		// Р“Р»Р°РІРЅС‹Р№ С†РёРєР» РїСЂРёР»РѕР¶РµРЅРёСЏ
 		bool mouseWasPressed = false;
 
 		while (window.isOpen())
@@ -205,16 +216,16 @@ int main() {
 					mouseWasPressed = true;
 				}
 				if (event->is < sf::Event::MouseButtonReleased>() && mouseWasPressed) {
-					// Получаем позицию мыши
+					// РџРѕР»СѓС‡Р°РµРј РїРѕР·РёС†РёСЋ РјС‹С€Рё
 					sf::Vector2i localPosition = sf::Mouse::getPosition(window);
 					sf::Vector2f mousePos = window.mapPixelToCoords(
 						localPosition);
 
-					// Проверяем, какая кнопка была нажата
+					// РџСЂРѕРІРµСЂСЏРµРј, РєР°РєР°СЏ РєРЅРѕРїРєР° Р±С‹Р»Р° РЅР°Р¶Р°С‚Р°
 
 					for (size_t i = 0; i < buttons.size(); ++i) {
 						if (buttons[i].getGlobalBounds().contains(mousePos)) {
-							processNumber(numbers[i], &activebody); // Вызываем функцию с числом
+							processNumber(numbers[i], &activebody); // Р’С‹Р·С‹РІР°РµРј С„СѓРЅРєС†РёСЋ СЃ С‡РёСЃР»РѕРј
 							int numberday = activebody.days;
 							daytext.setString("Day: " + std::to_string(numberday + 1));
 							window.draw(daytext);
@@ -251,21 +262,21 @@ int main() {
 			}
 
 
-			// Обработка нажатий на кнопки
-	// Изменяем цвет кнопок при наведении
+			// РћР±СЂР°Р±РѕС‚РєР° РЅР°Р¶Р°С‚РёР№ РЅР° РєРЅРѕРїРєРё
+	// РР·РјРµРЅСЏРµРј С†РІРµС‚ РєРЅРѕРїРѕРє РїСЂРё РЅР°РІРµРґРµРЅРёРё
 			sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 			for (size_t i = 0; i < buttons.size(); ++i) {
 				if (buttons[i].getGlobalBounds().contains(mousePos)) {
-					buttons[i].setFillColor(sf::Color(200, 192, 98)); // Светло-зеленый
+					buttons[i].setFillColor(sf::Color(200, 192, 98)); // РЎРІРµС‚Р»Рѕ-Р·РµР»РµРЅС‹Р№
 				}
 				else {
-					buttons[i].setFillColor(sf::Color(253, 246, 171)); // Обычный зеленый
+					buttons[i].setFillColor(sf::Color(253, 246, 171)); // РћР±С‹С‡РЅС‹Р№ Р·РµР»РµРЅС‹Р№
 				}
 			}
 
-			// РИсуем
+			// Р РСЃСѓРµРј
 
-			sf::Vector2u windowSize = window.getSize();//размеры окна
+			sf::Vector2u windowSize = window.getSize();//СЂР°Р·РјРµСЂС‹ РѕРєРЅР°
 			float coefx = static_cast<float>(windowSize.x) / sizepicture.x;
 			float coefy = static_cast<float>(windowSize.y) / sizepicture.y;
 			backgroundSprite.setScale(sf::Vector2f(coefx, coefy));
@@ -275,25 +286,25 @@ int main() {
 			window.draw(peuptext);
 			window.draw(daybutton);
 			window.draw(daytext);
-			//Рисуем шкалы предметов
+			//Р РёСЃСѓРµРј С€РєР°Р»С‹ РїСЂРµРґРјРµС‚РѕРІ
 			for (size_t i = 0; i < subnumber.size(); ++i) {
 				window.draw(subbackground[i]);
 				window.draw(subprogress[i]);
 				window.draw(subtexts[i]);
 			}
-			// Рисуем шкалы параметров
+			// Р РёСЃСѓРµРј С€РєР°Р»С‹ РїР°СЂР°РјРµС‚СЂРѕРІ
 			for (size_t i = 0; i < barsnumber.size(); ++i) {
 				window.draw(barbackground[i]);
 				window.draw(bartexts[i]);
 				for (int i = 0; i < 5; ++i) {
 					int num = activebody.stud->stats.at(conver.at(i+1));
-					barprogress[i].setSize(sf::Vector2f(barWidth * (num / 100.0f), barHeight)); // Пример  прогресса
+					barprogress[i].setSize(sf::Vector2f(barWidth * (num / 100.0f), barHeight)); // РџСЂРёРјРµСЂ  РїСЂРѕРіСЂРµСЃСЃР°
 					window.draw(barprogress[i]);
 
 				}
 
 			}
-			// Рисуем кнопки и текст
+			// Р РёСЃСѓРµРј РєРЅРѕРїРєРё Рё С‚РµРєСЃС‚
 			for (size_t i = 0; i < buttons.size(); ++i) {
 				window.draw(buttons[i]);
 				window.draw(buttonTexts[i]);
