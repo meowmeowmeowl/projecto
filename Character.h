@@ -2,6 +2,8 @@
 #define CHARACTER_H
 #include "Tasks.h"
 #include "Achieve.h"
+#include <iostream>
+
 struct Character
 {
 	std::unordered_map<std::string, int> stats;
