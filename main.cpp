@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <unordered_map>
 #include <string>
@@ -12,9 +12,43 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include "Intro.h"
-bool createNumber(int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts, sf::Font& font) {
-    std::cout << "Pressed button with number " << number << std::endl;
-    pressedNumberText.setString("Pressed button: " + std::to_string(number));
+bool createvariants(int number, std::vector<sf::RectangleShape>& varButtons, std::vector<sf::Text>& varTexts, sf::Font& font) {
+
+    // Создаем новые кнопки
+    const float newButtonWidth = 50.f;
+    const float newButtonHeight = 30.f;
+    const float newPadding = 20.f;
+    const float newStartX = (800 - (3 * newButtonWidth + 2 * newPadding)) / 2.f;
+    const float newStartY = 300.f; // Позиция ниже оригинальных кнопок
+    for (int i = 0; i < 3; ++i) {
+        // Создаем прямоугольник новой кнопки
+        sf::RectangleShape button({ sf::Vector2f(newButtonWidth, newButtonHeight) });
+        button.setPosition({ newStartX + i * (newButtonWidth + newPadding), newStartY });
+        button.setFillColor(sf::Color::Red);
+        button.setOutlineThickness(2.f);
+        button.setOutlineColor(sf::Color::Black);
+        varButtons.push_back(button);
+
+        // Создаем текст для новой кнопки
+        sf::Text text(font);
+        text.setFont(font);
+        text.setString(std::to_string(i + 1));
+        text.setCharacterSize(24);
+        text.setFillColor(sf::Color::White);
+
+        // Центрируем текст
+        sf::FloatRect textRect = text.getLocalBounds();
+        text.setPosition({ newStartX + i * (newButtonWidth + newPadding) + newButtonWidth / 2.0f ,
+                           newStartY + newButtonHeight / 2.0f });
+
+        varTexts.push_back(text);
+    }
+
+    return true; // Указываем, что кнопка была нажата
+
+
+}
+bool createNumber(int number, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts, sf::Font& font){
 
     // Создаем новые кнопки
     const float newButtonWidth = 100.f;
@@ -52,15 +86,30 @@ bool createNumber(int number, sf::Text& pressedNumberText, std::vector<sf::Recta
 
 }
 // Функция для обработки нажатий на новые кнопки
-void processNewButtonClick(int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts) {
-    std::cout << "New button pressed with number " << number << std::endl;
-    pressedNumberText.setString("New button pressed: " + std::to_string(number));
-
+void processNewButtonClick(sf::Text& question, int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts, Action* meow, std::vector<sf::RectangleShape>& varButtons, std::vector<sf::Text>& varText, sf::Font& font) {
+    Character* student = meow->stud;
+    if (number == 1) {
+        std::cout << 1 << std::endl;
+        question.setString("Cats are");
+        //std::vector<std::string> variants = { "gas", "liquid", "solid" };
+        createvariants(1, varButtons, varText, font);
+        student->physic.makeoperation(student->stats["bot"], student->achieve[0]);
+    }
+    else if (number == 3) {
+        std::cout << 2 << std::endl;
+        question.setString("What is Snake");
+        createvariants(1, varButtons, varText, font);
+        student->proga.makeoperation(student->stats["bot"], student->achieve[2]);
+    }
+    else {
+        std::cout << 3 << std::endl;
+        question.setString("What is 1 + 1");
+        createvariants(1, varButtons, varText, font);
+        student->math.makeoperation(student->stats["bot"], student->achieve[2]);
+    }
     // Очищаем новые кнопки и тексты
     newButtons.clear();
     newButtonTexts.clear();
-
-    std::cout << number;
 }
 std::string reason = "no";
 class DeadWindow {
@@ -176,6 +225,12 @@ public:
         std::vector<sf::RectangleShape> newButtons;
         std::vector<sf::Text> newButtonTexts;
         sf::Text pressedNumberText(font);
+        std::vector<sf::RectangleShape> varButtons;
+        std::vector<sf::Text> varTexts;
+        sf::Text question(font);
+        question.setCharacterSize(24);
+        question.setFillColor(sf::Color::Black);
+        question.setPosition({200.f, 250.f});
         // Êíîïêà ïîäñ÷åòà äíåé
         const float dayWidth = 60.f;
         const float dayHeight = 20.f;
@@ -294,9 +349,9 @@ public:
         inputTextDisplay.setPosition({ 360.f, 355.f });
         sf::Text questionText(font);
         questionText.setString("");
-        questionText.setCharacterSize(16);
-        questionText.setFillColor(sf::Color::White);
-        questionText.setPosition({ 200.f, 300.f });
+        questionText.setCharacterSize(24);
+        questionText.setFillColor(sf::Color::Black);
+        questionText.setPosition({ 200.f, 180.f });
 
         // Îáëàñòü äëÿ ñîîáùåíèé
         sf::Text statusMessage(font);
@@ -333,14 +388,21 @@ public:
                         for (size_t i = 0; i < buttons.size(); ++i) {
                             if (buttons[i].getGlobalBounds().contains(mousePos)) {
                                 if (numbers[i] == 2) { // Study
-                                    createNumber(numbers[i], pressedNumberText, newButtons, newButtonTexts, font);
+                                    createNumber(numbers[i], newButtons, newButtonTexts, font);
                                     questionText.setString("Choose subject (1: Physics, 2: Math, 3: Proga)");
+                               
                                 }
                                 else {
                                     processNumber(numbers[i], &activebody);
                                     statusMessage.setString("Performed " + actionLabels[i]);
                                     messageTimer = messageDuration;
                                 }
+                            }
+                        }
+                        for (size_t i = 0; i < newButtons.size(); ++i) {
+                            if (newButtons[i].getGlobalBounds().contains(mousePos)) {
+                                processNewButtonClick(question, i + 1, pressedNumberText, newButtons, newButtonTexts, &activebody, varButtons, varTexts, font); // Передаем номер новой кнопки
+                                processNumber(numbers[i], &activebody);
                             }
                         }
                     }
@@ -385,10 +447,30 @@ public:
                 }
             }
 
-            // Ïîäñâåòêà êíîïîê
+            //Подсвечиваем кнопки
             sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
             for (size_t i = 0; i < buttons.size(); ++i) {
                 buttons[i].setFillColor(buttons[i].getGlobalBounds().contains(mousePos) ? sf::Color(200, 192, 98) : sf::Color(253, 246, 171));
+            }
+            // Подсветка новых кнопок при наведении мыши
+            sf::Vector2f mousePos1 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            for (size_t i = 0; i < newButtons.size(); ++i) {
+                if (newButtons[i].getGlobalBounds().contains(mousePos1)) {
+                    newButtons[i].setFillColor(sf::Color::Cyan); // Подсветка
+                }
+                else {
+                    newButtons[i].setFillColor(sf::Color::Blue); // Цвет по умолчанию
+                }
+            }
+            // Подсветка новых кнопок при наведении мыши
+            sf::Vector2f mousePos2 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            for (size_t i = 0; i < varButtons.size(); ++i) {
+                if (varButtons[i].getGlobalBounds().contains(mousePos2)) {
+                    varButtons[i].setFillColor(sf::Color::White); // Подсветка
+                }
+                else {
+                    newButtons[i].setFillColor(sf::Color::Red); // Цвет по умолчанию
+                }
             }
 
             // Îáíîâëåíèå UI ïðîâåðêà íà æèçíü
@@ -445,6 +527,8 @@ public:
             if (messageTimer > 0) {
                 window.draw(statusMessage);
             }
+            window.draw(questionText);
+            window.draw(question);
             for (auto& newButton : newButtons) {
                 window.draw(newButton);
             }
@@ -452,6 +536,14 @@ public:
             {
                 window.draw(newButtonText);
             }
+            for (auto& varButton : varButtons) {
+                window.draw(varButton);
+            }
+            for (auto& varext : varTexts)
+            {
+                window.draw(varext);
+            }
+
             window.display();
         }
     }

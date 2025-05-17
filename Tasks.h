@@ -37,12 +37,13 @@ struct Physic:Study {
     }
     bool task() {
         std::cout << "some smart question enter 3 to make"<<std::endl;
+        /*
         int a;
         std::cin >> a;
         if (a == 3) {
             std::cout << "good" << std::endl;
             return 1;
-        }
+        }*/
         std::cout << "you failed sorry bro"<<std::endl;
         return 0;
     }
@@ -60,10 +61,11 @@ struct Proga :Study {
     bool task() {
         std::cout << "some smart question enter 2 to make";
         int a;
+        /*
         std::cin >> a;
         if (a == 2) {
             return 1;
-        }
+        }*/
         std::cout << "you failed sorry bro";
         return 0;
     }
@@ -71,19 +73,20 @@ struct Proga :Study {
 struct Math:Study {
     Math() {
       value = 0;
-      change = 20;
-      maxx = 200;
+      change = 10;
+      maxx = 100;
     }
     void showprogress() {
         std::cout << "how is math:" << value << std::endl;
     }
     bool task() {
         std::cout << "some smart question enter 1 to make";
+        /*
         int a;
         std::cin >> a;
         if (a == 1) {
             return 1;
-        }
+        }*/
         std::cout << "you failed sorry bro";
         return 0;
     }
