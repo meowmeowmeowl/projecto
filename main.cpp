@@ -96,12 +96,12 @@ void processNewButtonClick(sf::Text& question, int number, sf::Text& pressedNumb
     }
     else if (number == 3) {
         question.setString("What is Snake:1)Python 2)C++ 3)Assemler");
-        createvariants(1, varButtons, varText, font);
+        createvariants(3, varButtons, varText, font);
 
     }
     else if(number == 2){
         question.setString("What is 1 + 1: 1)11 2)2 3)0");
-        createvariants(1, varButtons, varText, font);
+        createvariants(2, varButtons, varText, font);
     }
     // Очищаем новые кнопки и тексты
     newButtons.clear();
@@ -391,6 +391,7 @@ public:
         InputState inputState = InputState::None;
         std::string achievementSubject = "";
         bool mouseWasPressed = false;
+        bool oldButtonsEnabled = true;
         while (window.isOpen()) {
             while (const std::optional event = window.pollEvent()) {
                 if (event->is<sf::Event::Closed>()) {
@@ -403,20 +404,25 @@ public:
                     const auto* mousereleased = event->getIf<sf::Event::MouseButtonReleased>();
                     sf::Vector2f mousePos = window.mapPixelToCoords(sf::Vector2i(mousereleased->position.x, mousereleased->position.y));
                     if (!showTextField) {
-                        for (size_t i = 0; i < buttons.size(); ++i) {
-                            if (buttons[i].getGlobalBounds().contains(mousePos)) {
-                                if (numbers[i] == 2) { // Study
-                                    createNumber(numbers[i], newButtons, newButtonTexts, font);
-                                    questionText.setString("Choose subject (1: Physics, 2: Math, 3: Proga)");
-                               
-                                }
-                                else {
-                                    processNumber(numbers[i], &activebody);
-                                    statusMessage.setString("Performed " + actionLabels[i]);
-                                    messageTimer = messageDuration;
+                        if (oldButtonsEnabled) {
+                            for (size_t i = 0; i < buttons.size(); ++i) {
+                                if (buttons[i].getGlobalBounds().contains(mousePos)) {
+                                    if (numbers[i] == 2) { // Study
+                                        createNumber(numbers[i], newButtons, newButtonTexts, font);
+                                        questionText.setString("Choose subject (1: Physics, 2: Math, 3: Proga)");
+                                        oldButtonsEnabled = false;
+
+                                    }
+                                    else {
+                                        processNumber(numbers[i], &activebody);
+                                        statusMessage.setString("Performed " + actionLabels[i]);
+                                        messageTimer = messageDuration;
+                                        
+                                    }
                                 }
                             }
                         }
+                    
                         for (size_t i = 0; i < newButtons.size(); ++i) {
                             if (newButtons[i].getGlobalBounds().contains(mousePos)) {
                                 oldnum = i+1;
@@ -426,10 +432,11 @@ public:
                         }
                        for (size_t i = 0; i < varButtons.size(); ++i) {
                             if (varButtons[i].getGlobalBounds().contains(mousePos)) {
+                               // std::cout << oldnum << std::endl;
                                 processanswer(oldnum, i + 1,  varButtons, varTexts, &activebody); // Передаем номер новой кнопки
                                 processNumber(2, &activebody);
                                 question.setString("");
-
+                                oldButtonsEnabled = true;
                             }
                         }
                     }
