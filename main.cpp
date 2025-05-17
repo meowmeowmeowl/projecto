@@ -94,12 +94,14 @@ void processNewButtonClick(sf::Text& question, int number, sf::Text& pressedNumb
         //std::vector<std::string> variants = { "gas", "liquid", "solid" };
         createvariants(1, varButtons, varText, font);
         student->physic.makeoperation(student->stats["bot"], student->achieve[0]);
+        student->showstats();
     }
     else if (number == 3) {
         std::cout << 2 << std::endl;
         question.setString("What is Snake");
         createvariants(1, varButtons, varText, font);
         student->proga.makeoperation(student->stats["bot"], student->achieve[2]);
+
     }
     else {
         std::cout << 3 << std::endl;
@@ -402,7 +404,8 @@ public:
                         for (size_t i = 0; i < newButtons.size(); ++i) {
                             if (newButtons[i].getGlobalBounds().contains(mousePos)) {
                                 processNewButtonClick(question, i + 1, pressedNumberText, newButtons, newButtonTexts, &activebody, varButtons, varTexts, font); // Передаем номер новой кнопки
-                                processNumber(numbers[i], &activebody);
+                                processNumber(2, &activebody);
+                                activebody.stud->showstats();
                             }
                         }
                     }
@@ -469,7 +472,7 @@ public:
                     varButtons[i].setFillColor(sf::Color::White); // Подсветка
                 }
                 else {
-                    newButtons[i].setFillColor(sf::Color::Red); // Цвет по умолчанию
+                    varButtons[i].setFillColor(sf::Color::Red); // Цвет по умолчанию
                 }
             }
 

@@ -59,18 +59,6 @@ struct Botenjoyer : public Character {
 	}
 	virtual void actionstudy() override {
 		std::vector<int> parametrs = { -10, 0, 10, 30, -10 };
-		std::cout << "what to bot" << "\n" << "1 to physcis; 2 to math 3 to proga" << std::endl;
-		int a;
-		std::cin >> a;
-		if (a == 1) {
-			physic.makeoperation(stats["bot"], achieve.numbers[0]);
-		}
-		else if (a == 2) {
-			math.makeoperation(stats["bot"], achieve.numbers[1]);
-		}
-		else {
-			proga.makeoperation(stats["bot"], achieve.numbers[2]);
-		}
 		action(parametrs);
 	}
 	virtual void actioncare() override {
@@ -100,18 +88,6 @@ struct Chillguy : public Character {
 	}
 	virtual void actionstudy() override {
 		std::vector<int> parametrs = { -10, 10, 0, -10, -0 };
-		std::cout << "what to bot" << "\n" << "1 to physcis; 2 to math 3 to proga" << std::endl;
-		int a;
-		std::cin >> a;
-		if (a == 1) {
-			physic.makeoperation(stats["bot"], achieve[0]);
-		}
-		else if (a == 2) {
-			math.makeoperation(stats["bot"], achieve[1]);
-		}
-		else {
-			proga.makeoperation(stats["bot"], achieve[2]);
-		}
 		action(parametrs);
 	}
 	virtual void actioncare() override {
@@ -139,18 +115,6 @@ struct Average : public Character {
 	}
 	virtual void actionstudy() override {
 		std::vector<int> parametrs = { -10, 10, -10, 0, -10 };
-		std::cout << "what to bot" << "\n" << "1 to physcis; 2 to math 3 to proga" << std::endl;
-		int a;
-		std::cin >> a;
-		if (a == 1) {
-			physic.makeoperation(stats["bot"], achieve[0]);
-		}
-		else if (a == 2) {
-			math.makeoperation(stats["bot"], achieve[1]);
-		}
-		else {
-			proga.makeoperation(stats["bot"], achieve[2]);
-		}
 		action(parametrs);
 	}
 	virtual void actioncare() override {
