@@ -18,6 +18,9 @@ void youdead(std::string reason, std::string& intext) {
         intext =  "Kobyakin has removed you";
 
     }
+    if (reason == "proga") {
+        intext = "It can be we if you wont be kind(*||*)";
+    }
     if (reason == "son") {
         intext = "you started hearing voices in your head and had to be hospitalized";
     }
