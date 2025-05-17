@@ -1,20 +1,20 @@
 #include "Intro.h"
 #include <iostream>
 
-Intro::Intro(sf::RenderWindow& win, const sf::Font& f, const sf::Texture te) : 
-    window(win), font(f), isMainMenu(true), gameTitle(font), startButtonText(font), backgroundTexture(te), backgroundSprite(te)  {
+Intro::Intro(sf::RenderWindow& win, const sf::Font& f, const sf::Texture te) :
+    window(win), font(f), isMainMenu(true), gameTitle(font), startButtonText(font), backgroundTexture(te), backgroundSprite(te) {
     if (!initialize()) {
         std::cerr << "Failed to initialize intro screen\n";
     }
 }
 bool Intro::initialize() {
-    // Р—Р°РіСЂСѓР·РєР° С€СЂРёС„С‚Р°
-    if (!font.openFromFile("arial.ttf")) {
+    // Загрузка шрифта
+    if (!font.openFromFile("C:/Users/Мария/source/repos/with_sfml/arialmt.ttf")) {
         return false;
     }
 
-    // Р—Р°РіСЂСѓР·РєР° Рё РЅР°СЃС‚СЂРѕР№РєР° С„РѕРЅР°
-    if (!backgroundTexture.loadFromFile("background.png")) {
+    // Загрузка и настройка фона
+    if (!backgroundTexture.loadFromFile("C:/Users/Мария/source/repos/with_sfml/fon.jpg")) {
         std::cerr << "Failed to load background!" << std::endl;
         return false;
     }
@@ -25,15 +25,15 @@ bool Intro::initialize() {
     float coefy = static_cast<float>(windowSize.y) / sizepicture.y;
     backgroundSprite.setScale(sf::Vector2f(coefx, coefy));
 
-    // РќР°СЃС‚СЂРѕР№РєР° РіР»Р°РІРЅРѕРіРѕ РјРµРЅСЋ
+    // Настройка главного меню
     gameTitle = sf::Text(font);
     gameTitle.setString("University Life Simulator");
     gameTitle.setCharacterSize(30);
     gameTitle.setFillColor(sf::Color::White);
-    gameTitle.setPosition({150.f, 100.f});
+    gameTitle.setPosition({ 150.f, 100.f });
 
-    startButton.setSize({200.f, 50.f});
-    startButton.setPosition({300.f, 300.f});
+    startButton.setSize({ 200.f, 50.f });
+    startButton.setPosition({ 300.f, 300.f });
     startButton.setFillColor(sf::Color(253, 246, 171));
     startButton.setOutlineThickness(2.f);
     startButton.setOutlineColor(sf::Color::Black);
@@ -42,10 +42,10 @@ bool Intro::initialize() {
     startButtonText.setString("Start Game");
     startButtonText.setCharacterSize(24);
     startButtonText.setFillColor(sf::Color::Black);
-    startButtonText.setPosition({320.f, 315.f});
+    startButtonText.setPosition({ 320.f, 315.f });
 
-    // РќР°СЃС‚СЂРѕР№РєР° РєРЅРѕРїРѕРє РІС‹Р±РѕСЂР° РїРµСЂСЃРѕРЅР°Р¶Р°
-    std::vector<std::string> labels = {"Bot Enjoyer", "Chill Guy", "Average"};
+    // Настройка кнопок выбора персонажа
+    std::vector<std::string> labels = { "Bot Enjoyer", "Chill Guy", "Average" };
     const float buttonWidth = 200.f;
     const float buttonHeight = 50.f;
     const float padding = 20.f;
@@ -53,8 +53,8 @@ bool Intro::initialize() {
     const float startY = 300.f;
 
     for (size_t i = 0; i < 3; ++i) {
-        sf::RectangleShape button({buttonWidth, buttonHeight});
-        button.setPosition({startX + i * (buttonWidth + padding), startY});
+        sf::RectangleShape button({ buttonWidth, buttonHeight });
+        button.setPosition({ startX + i * (buttonWidth + padding), startY });
         button.setFillColor(sf::Color(253, 246, 171));
         button.setOutlineThickness(2.f);
         button.setOutlineColor(sf::Color::Black);
@@ -64,11 +64,11 @@ bool Intro::initialize() {
         text.setString(labels[i]);
         text.setCharacterSize(24);
         text.setFillColor(sf::Color::Black);
-        text.setPosition({startX + i * (buttonWidth + padding) + 20.f, startY + 15.f});
+        text.setPosition({ startX + i * (buttonWidth + padding) + 20.f, startY + 15.f });
         buttonTexts.push_back(text);
     }
 
-    // РќР°СЃС‚СЂРѕР№РєР° РѕРїРёСЃР°РЅРёР№
+    // Настройка описаний
     std::vector<std::string> desc = {
         "Bot Enjoyer: Loves coding, strong in bot, weak in talk.",
         "Chill Guy: Relaxed, good at chilling, struggles with bot.",
@@ -79,7 +79,7 @@ bool Intro::initialize() {
         text.setString(desc[i]);
         text.setCharacterSize(14);
         text.setFillColor(sf::Color::White);
-        text.setPosition({50.f, 400.f + i * 30.f});
+        text.setPosition({ 50.f, 400.f + i * 30.f });
         descriptions.push_back(text);
     }
 
@@ -101,9 +101,10 @@ Character* Intro::run() {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 if (isMainMenu) {
                     if (startButton.getGlobalBounds().contains(mousePos)) {
-                        isMainMenu = false; // РџРµСЂРµС…РѕРґ Рє РІС‹Р±РѕСЂСѓ РїРµСЂСЃРѕРЅР°Р¶Р°
+                        isMainMenu = false; // Переход к выбору персонажа
                     }
-                } else {
+                }
+                else {
                     for (size_t i = 0; i < buttons.size(); ++i) {
                         if (buttons[i].getGlobalBounds().contains(mousePos)) {
                             switch (i) {
@@ -118,24 +119,26 @@ Character* Intro::run() {
             }
         }
 
-        // РџРѕРґСЃРІРµС‚РєР° РєРЅРѕРїРѕРє
+        // Подсветка кнопок
         sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         if (isMainMenu) {
             startButton.setFillColor(startButton.getGlobalBounds().contains(mousePos) ? sf::Color(200, 192, 98) : sf::Color(253, 246, 171));
-        } else {
+        }
+        else {
             for (size_t i = 0; i < buttons.size(); ++i) {
                 buttons[i].setFillColor(buttons[i].getGlobalBounds().contains(mousePos) ? sf::Color(200, 192, 98) : sf::Color(253, 246, 171));
             }
         }
 
-        // РћС‚СЂРёСЃРѕРІРєР°
+        // Отрисовка
         window.clear(sf::Color(50, 50, 50));
         window.draw(backgroundSprite);
         if (isMainMenu) {
             window.draw(gameTitle);
             window.draw(startButton);
             window.draw(startButtonText);
-        } else {
+        }
+        else {
             for (size_t i = 0; i < buttons.size(); ++i) {
                 window.draw(buttons[i]);
                 window.draw(buttonTexts[i]);
@@ -147,7 +150,7 @@ Character* Intro::run() {
             title.setString("Choose Your Fighter");
             title.setCharacterSize(30);
             title.setFillColor(sf::Color::White);
-            title.setPosition({250.f, 50.f});
+            title.setPosition({ 250.f, 50.f });
             window.draw(title);
         }
         window.display();

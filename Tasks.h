@@ -9,19 +9,14 @@ struct Study {
     float value;
     float change;
     float maxx;
-    bool tas;
-  virtual void makeoperation(int k, bool f) {;
-      if (tas) {
+  virtual void makeoperation(int k, bool f) {
           value = value + change * (1 + k / 100.0f);
           if (f) { value = 1.1 * value; }
           if (value > maxx) {
               value = maxx;
           }
-      }
   }
 //вспомогательное
-virtual void showprogress() {
-}
 };
 
 struct Physic:Study {
@@ -41,7 +36,6 @@ struct Proga :Study {
         value = 0;
         change = 10;
         maxx = 100;
-        tas = 1;
     }
     void showprogress() {
         std::cout << "how is proga:" << value << std::endl;
@@ -53,7 +47,6 @@ struct Math:Study {
       value = 0;
       change = 10;
       maxx = 100;
-      tas = 1;
     }
     void showprogress() {
         std::cout << "how is math:" << value << std::endl;
@@ -63,7 +56,6 @@ struct Math:Study {
 struct Pe:Study {
     Pe() {
         value = 0;
-        tas = 1;
         maxx = 25;
         change = 0;
     }

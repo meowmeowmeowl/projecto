@@ -39,19 +39,18 @@ struct Action {
 		std::cout << "Deadline uiuiui" << std::endl;
 		if (stud->physic.value != stud->physic.maxx) {
 			alive = 0;
-			reason = "physic";
 		}
-		stud->physic.value = 0;
 		if (stud->math.value != stud->math.maxx) {
 			alive = 0;
 			reason = "math";
 		}
-		stud->math.value = 0;
 		if (stud->proga.value != stud->proga.maxx) {
 			alive = 0;
 			reason = "proga";
 		}
 		stud->proga.value = 0;
+		stud->physic.value = 0;
+		stud->math.value = 0;
 	}
 	void checkprivilege() {
 		std::unordered_map<std::string, int> priv;

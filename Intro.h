@@ -1,6 +1,9 @@
 #ifndef INTRO_H
 #define INTRO_H
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Rect.hpp>
 #include <vector>
 #include <string>
 #include "Character.h"
@@ -8,7 +11,7 @@
 class Intro {
 public:
     Intro(sf::RenderWindow& window, const sf::Font& f, const sf::Texture te);
-    Character* run(); // Р—Р°РїСѓСЃРєР°РµС‚ Р·Р°СЃС‚Р°РІРєСѓ Рё РІРѕР·РІСЂР°С‰Р°РµС‚ РІС‹Р±СЂР°РЅРЅРѕРіРѕ РїРµСЂСЃРѕРЅР°Р¶Р°
+    Character* run(); // Запускает заставку и возвращает выбранного персонажа
 private:
     sf::RenderWindow& window;
     sf::Font font;
@@ -21,7 +24,7 @@ private:
     std::vector<sf::Text> buttonTexts;
     std::vector<sf::Text> descriptions;
     bool isMainMenu; // Tracks whether we're in main menu or character selection
-    bool initialize(); // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С€СЂРёС„С‚Р°, РєРЅРѕРїРѕРє, С‚РµРєСЃС‚Р° Рё С„РѕРЅР°
+    bool initialize(); // Инициализация шрифта, кнопок, текста и фона
 };
 
 #endif // INTRO_H

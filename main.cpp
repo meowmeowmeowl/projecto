@@ -92,19 +92,16 @@ void processNewButtonClick(sf::Text& question, int number, sf::Text& pressedNumb
         question.setString("Cats are:1)liquid, 2)gas, 3)solid");
         //std::vector<std::string> variants = { "gas", "liquid", "solid" };
         createvariants( 1, varButtons, varText, font);
-        student->physic.makeoperation(student->stats["bot"], student->achieve[0]);
         
     }
     else if (number == 3) {
         question.setString("What is Snake:1)Python 2)C++ 3)Assemler");
         createvariants(1, varButtons, varText, font);
-        student->proga.makeoperation(student->stats["bot"], student->achieve[2]);
 
     }
     else if(number == 2){
         question.setString("What is 1 + 1: 1)11 2)2 3)0");
         createvariants(1, varButtons, varText, font);
-        student->math.makeoperation(student->stats["bot"], student->achieve[1]);
     }
     // Очищаем новые кнопки и тексты
     newButtons.clear();
@@ -113,21 +110,18 @@ void processNewButtonClick(sf::Text& question, int number, sf::Text& pressedNumb
 void processanswer(int oldnumber, int number,  std::vector<sf::RectangleShape>& varButtons, std::vector<sf::Text>& varTexts, Action* meow) {
     Character* student = meow->stud;
     if (oldnumber == 1) {
-        student->physic.tas = 0;
         if (number == 1) {
-            student->physic.tas = 1;
+            student->physic.makeoperation(student->stats["bot"], student->achieve[0]);
         }
     }
     if (oldnumber == 2) {
-        student->math.tas = 0;
         if (number == 1) {
-            student->math.tas = 1;
+            student->math.makeoperation(student->stats["bot"], student->achieve[1]);
         }
     }
     if (oldnumber == 3) {
-        student->proga.tas = 0;
         if (number == 1) {
-            student->proga.tas = 1;
+            student->proga.makeoperation(student->stats["bot"], student->achieve[2]);
         }
     }
     // Очищаем новые кнопки и тексты
@@ -427,13 +421,15 @@ public:
                             if (newButtons[i].getGlobalBounds().contains(mousePos)) {
                                 oldnum = i+1;
                                 processNewButtonClick(question, i + 1, pressedNumberText, newButtons, newButtonTexts, &activebody, varButtons, varTexts, font); // Передаем номер новой кнопки
-
+                                questionText.setString("");
                             }
                         }
                        for (size_t i = 0; i < varButtons.size(); ++i) {
                             if (varButtons[i].getGlobalBounds().contains(mousePos)) {
                                 processanswer(oldnum, i + 1,  varButtons, varTexts, &activebody); // Передаем номер новой кнопки
                                 processNumber(2, &activebody);
+                                question.setString("");
+
                             }
                         }
                     }
