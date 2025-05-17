@@ -12,7 +12,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include "Intro.h"
-bool createvariants(int number, std::vector<sf::RectangleShape>& varButtons, std::vector<sf::Text>& varTexts, sf::Font& font) {
+bool createvariants( int number, std::vector<sf::RectangleShape>& varButtons, std::vector<sf::Text>& varTexts, sf::Font& font) {
 
     // Создаем новые кнопки
     const float newButtonWidth = 50.f;
@@ -89,29 +89,50 @@ bool createNumber(int number, std::vector<sf::RectangleShape>& newButtons, std::
 void processNewButtonClick(sf::Text& question, int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts, Action* meow, std::vector<sf::RectangleShape>& varButtons, std::vector<sf::Text>& varText, sf::Font& font) {
     Character* student = meow->stud;
     if (number == 1) {
-        std::cout << 1 << std::endl;
-        question.setString("Cats are");
+        question.setString("Cats are:1)liquid, 2)gas, 3)solid");
         //std::vector<std::string> variants = { "gas", "liquid", "solid" };
-        createvariants(1, varButtons, varText, font);
+        createvariants( 1, varButtons, varText, font);
         student->physic.makeoperation(student->stats["bot"], student->achieve[0]);
-        student->showstats();
+        
     }
     else if (number == 3) {
-        std::cout << 2 << std::endl;
-        question.setString("What is Snake");
+        question.setString("What is Snake:1)Python 2)C++ 3)Assemler");
         createvariants(1, varButtons, varText, font);
         student->proga.makeoperation(student->stats["bot"], student->achieve[2]);
 
     }
-    else {
-        std::cout << 3 << std::endl;
-        question.setString("What is 1 + 1");
+    else if(number == 2){
+        question.setString("What is 1 + 1: 1)11 2)2 3)0");
         createvariants(1, varButtons, varText, font);
-        student->math.makeoperation(student->stats["bot"], student->achieve[2]);
+        student->math.makeoperation(student->stats["bot"], student->achieve[1]);
     }
     // Очищаем новые кнопки и тексты
     newButtons.clear();
     newButtonTexts.clear();
+}
+void processanswer(int oldnumber, int number,  std::vector<sf::RectangleShape>& varButtons, std::vector<sf::Text>& varTexts, Action* meow) {
+    Character* student = meow->stud;
+    if (oldnumber == 1) {
+        student->physic.tas = 0;
+        if (number == 1) {
+            student->physic.tas = 1;
+        }
+    }
+    if (oldnumber == 2) {
+        student->math.tas = 0;
+        if (number == 1) {
+            student->math.tas = 1;
+        }
+    }
+    if (oldnumber == 3) {
+        student->proga.tas = 0;
+        if (number == 1) {
+            student->proga.tas = 1;
+        }
+    }
+    // Очищаем новые кнопки и тексты
+    varButtons.clear();
+    varTexts.clear();
 }
 std::string reason = "no";
 class DeadWindow {
@@ -230,6 +251,7 @@ public:
         std::vector<sf::RectangleShape> varButtons;
         std::vector<sf::Text> varTexts;
         sf::Text question(font);
+        int oldnum;
         question.setCharacterSize(24);
         question.setFillColor(sf::Color::Black);
         question.setPosition({200.f, 250.f});
@@ -403,9 +425,15 @@ public:
                         }
                         for (size_t i = 0; i < newButtons.size(); ++i) {
                             if (newButtons[i].getGlobalBounds().contains(mousePos)) {
+                                oldnum = i+1;
                                 processNewButtonClick(question, i + 1, pressedNumberText, newButtons, newButtonTexts, &activebody, varButtons, varTexts, font); // Передаем номер новой кнопки
+
+                            }
+                        }
+                       for (size_t i = 0; i < varButtons.size(); ++i) {
+                            if (varButtons[i].getGlobalBounds().contains(mousePos)) {
+                                processanswer(oldnum, i + 1,  varButtons, varTexts, &activebody); // Передаем номер новой кнопки
                                 processNumber(2, &activebody);
-                                activebody.stud->showstats();
                             }
                         }
                     }
