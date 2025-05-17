@@ -12,22 +12,71 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include "Intro.h"
+bool createNumber(int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts, sf::Font& font) {
+    std::cout << "Pressed button with number " << number << std::endl;
+    pressedNumberText.setString("Pressed button: " + std::to_string(number));
 
-std::string reason ="no";
+    // РЎРѕР·РґР°РµРј РЅРѕРІС‹Рµ РєРЅРѕРїРєРё
+    const float newButtonWidth = 100.f;
+    const float newButtonHeight = 50.f;
+    const float newPadding = 20.f;
+    const float newStartX = (800 - (3 * newButtonWidth + 2 * newPadding)) / 2.f;
+    const float newStartY = 300.f; // РџРѕР·РёС†РёСЏ РЅРёР¶Рµ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… РєРЅРѕРїРѕРє
+
+    for (int i = 0; i < 3; ++i) {
+        // РЎРѕР·РґР°РµРј РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє РЅРѕРІРѕР№ РєРЅРѕРїРєРё
+        sf::RectangleShape button({ sf::Vector2f(newButtonWidth, newButtonHeight) });
+        button.setPosition({ newStartX + i * (newButtonWidth + newPadding), newStartY });
+        button.setFillColor(sf::Color::Blue);
+        button.setOutlineThickness(2.f);
+        button.setOutlineColor(sf::Color::Black);
+        newButtons.push_back(button);
+
+        // РЎРѕР·РґР°РµРј С‚РµРєСЃС‚ РґР»СЏ РЅРѕРІРѕР№ РєРЅРѕРїРєРё
+        sf::Text text(font);
+        text.setFont(font);
+        text.setString(std::to_string(i + 1));
+        text.setCharacterSize(24);
+        text.setFillColor(sf::Color::White);
+
+        // Р¦РµРЅС‚СЂРёСЂСѓРµРј С‚РµРєСЃС‚
+        sf::FloatRect textRect = text.getLocalBounds();
+        text.setPosition({ newStartX + i * (newButtonWidth + newPadding) + newButtonWidth / 2.0f ,
+                           newStartY + newButtonHeight / 2.0f });
+
+        newButtonTexts.push_back(text);
+    }
+
+    return true; // РЈРєР°Р·С‹РІР°РµРј, С‡С‚Рѕ РєРЅРѕРїРєР° Р±С‹Р»Р° РЅР°Р¶Р°С‚Р°
+
+
+}
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РЅР°Р¶Р°С‚РёР№ РЅР° РЅРѕРІС‹Рµ РєРЅРѕРїРєРё
+void processNewButtonClick(int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts) {
+    std::cout << "New button pressed with number " << number << std::endl;
+    pressedNumberText.setString("New button pressed: " + std::to_string(number));
+
+    // РћС‡РёС‰Р°РµРј РЅРѕРІС‹Рµ РєРЅРѕРїРєРё Рё С‚РµРєСЃС‚С‹
+    newButtons.clear();
+    newButtonTexts.clear();
+
+    std::cout << number;
+}
+std::string reason = "no";
 class DeadWindow {
 public:
     void run(std::string reas) {
         sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "My window");
         sf::Texture fontexture;
-        // Фон
-        if (!fontexture.loadFromFile("C:/Users/Мария/source/repos/with_sfml/fon.jpg")) {
+        // Г”Г®Г­
+        if (!fontexture.loadFromFile("C:/Users/РњР°СЂРёСЏ/source/repos/with_sfml/fon.jpg")) {
             std::cerr << "Failed to load background!" << std::endl;
             return;
         }
         sf::Sprite backgroundSprite(fontexture);
         sf::Vector2u sizepicture = fontexture.getSize();
         sf::Font font;
-        if (!font.openFromFile("C:/Users/Мария/source/repos/with_sfml/arialmt.ttf")) {
+        if (!font.openFromFile("C:/Users/РњР°СЂРёСЏ/source/repos/with_sfml/arialmt.ttf")) {
             std::cerr << "Failed to load font!" << std::endl;
             return;
         }
@@ -66,7 +115,7 @@ public:
                     mouseWasPressed = false;
                 }
             }
-            // Отрисовка
+            // ГЋГІГ°ГЁГ±Г®ГўГЄГ 
             window.clear(sf::Color(50, 50, 50));
             window.draw(backgroundSprite);
             window.draw(accept);
@@ -80,20 +129,20 @@ public:
     void run() {
         sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "My window");
         sf::Texture fontexture;
-        // Фон
-        if (!fontexture.loadFromFile("C:/Users/Мария/source/repos/with_sfml/fon.jpg")) {
+        // Г”Г®Г­
+        if (!fontexture.loadFromFile("C:/Users/РњР°СЂРёСЏ/source/repos/with_sfml/fon.jpg")) {
             std::cerr << "Failed to load background!" << std::endl;
             return;
         }
         sf::Sprite backgroundSprite(fontexture);
         sf::Vector2u sizepicture = fontexture.getSize();
         sf::Font font;
-        if (!font.openFromFile("C:/Users/Мария/source/repos/with_sfml/arialmt.ttf")) {
+        if (!font.openFromFile("C:/Users/РњР°СЂРёСЏ/source/repos/with_sfml/arialmt.ttf")) {
             std::cerr << "Failed to load font!" << std::endl;
             return;
         }
 
-        // Шкалы для предметов
+        // ГГЄГ Г«Г» Г¤Г«Гї ГЇГ°ГҐГ¤Г¬ГҐГІГ®Гў
         const float subWidth = 100.f;
         const float subHeight = 15.f;
         const float paddingsub = 15.f;
@@ -123,7 +172,11 @@ public:
             subprogress.push_back(progresssub);
         }
 
-        // Кнопка подсчета дней
+        //РљРЅРѕРїРѕС‡РєРё РґР»СЏ Р±РѕС‚Р° РїСЂРµРґРјРµС‚РѕРІ
+        std::vector<sf::RectangleShape> newButtons;
+        std::vector<sf::Text> newButtonTexts;
+        sf::Text pressedNumberText(font);
+        // ГЉГ­Г®ГЇГЄГ  ГЇГ®Г¤Г±Г·ГҐГІГ  Г¤Г­ГҐГ©
         const float dayWidth = 60.f;
         const float dayHeight = 20.f;
         sf::RectangleShape daybutton(sf::Vector2f(dayWidth, dayHeight));
@@ -137,7 +190,7 @@ public:
         daytext.setFillColor(sf::Color::Black);
         daytext.setPosition({ daybutton.getPosition().x + 5.f, daybutton.getPosition().y + 2.f });
 
-        // Кнопка для физры
+        // ГЉГ­Г®ГЇГЄГ  Г¤Г«Гї ГґГЁГ§Г°Г»
         const float peWidth = 40.f;
         const float peHeight = 30.f;
         sf::RectangleShape pebutton(sf::Vector2f(peWidth, peHeight));
@@ -156,7 +209,7 @@ public:
         petext.setFillColor(sf::Color::Black);
         petext.setPosition({ pebutton.getPosition().x + pebutton.getSize().y / 2.f, pebutton.getPosition().y + pebutton.getSize().y / 2.f });
 
-        // Шкалы для параметров
+        // ГГЄГ Г«Г» Г¤Г«Гї ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў
         const float barWidth = 150.f;
         const float barHeight = 20.f;
         const float paddingBar = 20.f;
@@ -186,7 +239,7 @@ public:
             barprogress.push_back(progressBar);
         }
 
-        // Отображение статов
+        // ГЋГІГ®ГЎГ°Г Г¦ГҐГ­ГЁГҐ Г±ГІГ ГІГ®Гў
         std::vector<sf::Text> statTexts;
         const float statX = 650.f;
         const float statY = 100.f;
@@ -200,7 +253,7 @@ public:
             statTexts.push_back(text);
         }
 
-        // Кнопки действий
+        // ГЉГ­Г®ГЇГЄГЁ Г¤ГҐГ©Г±ГІГўГЁГ©
         std::vector<int> numbers = { 1, 2, 3, 4, 5, 6 };
         std::vector<std::string> actionLabels = { "Sleep", "Study", "Care", "Chill", "Active", "PE" };
         std::vector<sf::RectangleShape> buttons;
@@ -226,7 +279,7 @@ public:
             buttonTexts.push_back(text);
         }
 
-        // Текстовое поле для ввода
+        // Г’ГҐГЄГ±ГІГ®ГўГ®ГҐ ГЇГ®Г«ГҐ Г¤Г«Гї ГўГўГ®Г¤Г 
         bool showTextField = false;
         std::string inputText = "";
         sf::RectangleShape textField(sf::Vector2f(100.f, 30.f));
@@ -245,7 +298,7 @@ public:
         questionText.setFillColor(sf::Color::White);
         questionText.setPosition({ 200.f, 300.f });
 
-        // Область для сообщений
+        // ГЋГЎГ«Г Г±ГІГј Г¤Г«Гї Г±Г®Г®ГЎГ№ГҐГ­ГЁГ©
         sf::Text statusMessage(font);
         statusMessage.setString("");
         statusMessage.setCharacterSize(16);
@@ -254,13 +307,13 @@ public:
         float messageTimer = 0.f;
         const float messageDuration = 3.f;
 
-        // Создаем персонажа
+        // Г‘Г®Г§Г¤Г ГҐГ¬ ГЇГҐГ°Г±Г®Г­Г Г¦Г 
         Intro intro(window, font, fontexture);
         Character* someperson = intro.run();
         // if (!someperson) return 0;
         Action activebody(someperson);
 
-        // Состояние для вопросов
+        // Г‘Г®Г±ГІГ®ГїГ­ГЁГҐ Г¤Г«Гї ГўГ®ГЇГ°Г®Г±Г®Гў
         enum class InputState { None, Study, Achievement };
         InputState inputState = InputState::None;
         std::string achievementSubject = "";
@@ -269,74 +322,6 @@ public:
             while (const std::optional event = window.pollEvent()) {
                 if (event->is<sf::Event::Closed>()) {
                     window.close();
-                }
-                if (showTextField && event->is<sf::Event::TextEntered>()) {
-                    const auto* textentered = event->getIf<sf::Event::TextEntered>();
-                    if (textentered->unicode >= '0' && textentered->unicode <= '3') {
-                        inputText = static_cast<char>(textentered->unicode);
-                        inputTextDisplay.setString(inputText);
-                    }
-                    else if (textentered->unicode == 8 && !inputText.empty()) { // Backspace
-                        inputText.clear();
-                        inputTextDisplay.setString("");
-                    }
-                }
-                if (showTextField && event->is<sf::Event::KeyPressed>()) {
-                    const auto* keypressed = event->getIf<sf::Event::KeyPressed>();
-                    if (keypressed->code == sf::Keyboard::Key::Enter && !inputText.empty()) {
-                        int input = std::stoi(inputText);
-                        if (inputState == InputState::Study) {
-                            if (input >= 1 && input <= 3) {
-                                if (input == 1) {
-                                    activebody.stud->physic.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[0]);
-                                }
-                                else if (input == 2) {
-                                    activebody.stud->math.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[1]);
-                                }
-                                else {
-                                    activebody.stud->proga.makeoperation(activebody.stud->stats["bot"], activebody.stud->achieve.numbers[2]);
-                                }
-                                std::vector<int> studyParams;
-                                if (dynamic_cast<Botenjoyer*>(activebody.stud)) {
-                                    studyParams = { -10, 0, 10, 30, -10 };
-                                }
-                                else if (dynamic_cast<Chillguy*>(activebody.stud)) {
-                                    studyParams = { -10, 10, 0, -10, 0 };
-                                }
-                                else {
-                                    studyParams = { -10, 10, -10, 0, -10 };
-                                }
-                                activebody.stud->action(studyParams);
-                                activebody.pressthebutton();
-                                statusMessage.setString("Studied " + subjects[input]);
-                                messageTimer = messageDuration;
-                            }
-                        }
-                        else if (inputState == InputState::Achievement) {
-                            if (input == 1) {
-                                if (achievementSubject == "physic") {
-                                    activebody.stud->achieve.numbers[0] = 1;
-                                    statusMessage.setString("Improved physics");
-                                }
-                                else if (achievementSubject == "math") {
-                                    activebody.stud->achieve.numbers[1] = 1;
-                                    statusMessage.setString("Improved math");
-                                }
-                                else if (achievementSubject == "proga") {
-                                    activebody.stud->achieve.numbers[2] = 1;
-                                    statusMessage.setString("Improved programming");
-                                }
-                            }
-                            else {
-                                statusMessage.setString("Skipped improvement");
-                            }
-                            messageTimer = messageDuration;
-                        }
-                        showTextField = false;
-                        inputText.clear();
-                        inputTextDisplay.setString("");
-                        inputState = InputState::None;
-                    }
                 }
                 if (event->is<sf::Event::MouseButtonPressed>() && event->getIf<sf::Event::MouseButtonPressed>()->button == sf::Mouse::Button::Left) {
                     mouseWasPressed = true;
@@ -348,8 +333,7 @@ public:
                         for (size_t i = 0; i < buttons.size(); ++i) {
                             if (buttons[i].getGlobalBounds().contains(mousePos)) {
                                 if (numbers[i] == 2) { // Study
-                                    showTextField = true;
-                                    inputState = InputState::Study;
+                                    createNumber(numbers[i], pressedNumberText, newButtons, newButtonTexts, font);
                                     questionText.setString("Choose subject (1: Physics, 2: Math, 3: Proga)");
                                 }
                                 else {
@@ -365,15 +349,15 @@ public:
             }
 
 
-            // Обновление сообщений
+            // ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г±Г®Г®ГЎГ№ГҐГ­ГЁГ©
             if (messageTimer > 0) {
-                messageTimer -= 0.016f; // Примерно 60 FPS
+                messageTimer -= 0.016f; // ГЏГ°ГЁГ¬ГҐГ°Г­Г® 60 FPS
                 if (messageTimer <= 0) {
                     statusMessage.setString("");
                 }
             }
 
-            // Проверка событий дня и достижений
+            // ГЏГ°Г®ГўГҐГ°ГЄГ  Г±Г®ГЎГ»ГІГЁГ© Г¤Г­Гї ГЁ Г¤Г®Г±ГІГЁГ¦ГҐГ­ГЁГ©
             if (activebody.number_action == 0 && activebody.days > 0) {
                 statusMessage.setString("It is a new day");
                 messageTimer = messageDuration;
@@ -397,20 +381,17 @@ public:
                     if (!arezero.empty()) {
                         int randomIndex = std::rand() % arezero.size();
                         achievementSubject = arezero[randomIndex];
-                        showTextField = true;
-                        inputState = InputState::Achievement;
-                        questionText.setString("Improve " + achievementSubject + "? (1: Yes, 0: No)");
                     }
                 }
             }
 
-            // Подсветка кнопок
+            // ГЏГ®Г¤Г±ГўГҐГІГЄГ  ГЄГ­Г®ГЇГ®ГЄ
             sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
             for (size_t i = 0; i < buttons.size(); ++i) {
                 buttons[i].setFillColor(buttons[i].getGlobalBounds().contains(mousePos) ? sf::Color(200, 192, 98) : sf::Color(253, 246, 171));
             }
 
-            // Обновление UI проверка на жизнь
+            // ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ UI ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г¦ГЁГ§Г­Гј
             daytext.setString("Day: " + std::to_string(activebody.days + 1));
             petext.setString(std::to_string(activebody.stud->pe.value));
             if (activebody.alive == 0) {
@@ -427,7 +408,7 @@ public:
             subprogress[1].setSize(sf::Vector2f(subWidth * (activebody.stud->math.value / 100.0f), subHeight));
             subprogress[2].setSize(sf::Vector2f(subWidth * (activebody.stud->proga.value / 100.0f), subHeight));
 
-            // Отрисовка
+            // ГЋГІГ°ГЁГ±Г®ГўГЄГ 
             sf::Vector2u windowSize = window.getSize();
             float coefx = static_cast<float>(windowSize.x) / sizepicture.x;
             float coefy = static_cast<float>(windowSize.y) / sizepicture.y;
@@ -463,6 +444,13 @@ public:
             }
             if (messageTimer > 0) {
                 window.draw(statusMessage);
+            }
+            for (auto& newButton : newButtons) {
+                window.draw(newButton);
+            }
+            for (auto& newButtonText : newButtonTexts)
+            {
+                window.draw(newButtonText);
             }
             window.display();
         }
