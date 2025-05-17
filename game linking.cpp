@@ -1,24 +1,22 @@
-
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Rect.hpp>
-
 bool processNumber(int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts, sf::Font& font) {
     std::cout << "Pressed button with number " << number << std::endl;
     pressedNumberText.setString("Pressed button: " + std::to_string(number));
 
-    // Создаем новые кнопки
+    // РЎРѕР·РґР°РµРј РЅРѕРІС‹Рµ РєРЅРѕРїРєРё
     const float newButtonWidth = 100.f;
     const float newButtonHeight = 50.f;
     const float newPadding = 20.f;
     const float newStartX = (800 - (3 * newButtonWidth + 2 * newPadding)) / 2.f;
-    const float newStartY = 300.f; // Позиция ниже оригинальных кнопок
+    const float newStartY = 300.f; // РџРѕР·РёС†РёСЏ РЅРёР¶Рµ РѕСЂРёРіРёРЅР°Р»СЊРЅС‹С… РєРЅРѕРїРѕРє
 
     for (int i = 0; i < 3; ++i) {
-        // Создаем прямоугольник новой кнопки
+        // РЎРѕР·РґР°РµРј РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє РЅРѕРІРѕР№ РєРЅРѕРїРєРё
         sf::RectangleShape button({ sf::Vector2f(newButtonWidth, newButtonHeight) });
         button.setPosition({ newStartX + i * (newButtonWidth + newPadding), newStartY });
         button.setFillColor(sf::Color::Blue);
@@ -26,14 +24,14 @@ bool processNumber(int number, sf::Text& pressedNumberText, std::vector<sf::Rect
         button.setOutlineColor(sf::Color::Black);
         newButtons.push_back(button);
 
-        // Создаем текст для новой кнопки
+        // РЎРѕР·РґР°РµРј С‚РµРєСЃС‚ РґР»СЏ РЅРѕРІРѕР№ РєРЅРѕРїРєРё
         sf::Text text(font);
         text.setFont(font);
         text.setString(std::to_string(i + 1));
         text.setCharacterSize(24);
         text.setFillColor(sf::Color::White);
 
-        // Центрируем текст
+        // Р¦РµРЅС‚СЂРёСЂСѓРµРј С‚РµРєСЃС‚
         sf::FloatRect textRect = text.getLocalBounds();
         text.setPosition({ newStartX + i * (newButtonWidth + newPadding) + newButtonWidth / 2.0f ,
                            newStartY + newButtonHeight / 2.0f });
@@ -41,39 +39,41 @@ bool processNumber(int number, sf::Text& pressedNumberText, std::vector<sf::Rect
         newButtonTexts.push_back(text);
     }
 
-    return true;
+    return true; // РЈРєР°Р·С‹РІР°РµРј, С‡С‚Рѕ РєРЅРѕРїРєР° Р±С‹Р»Р° РЅР°Р¶Р°С‚Р°
+
 
 }
-// Функция для обработки нажатий на новые кнопки
+// Р¤СѓРЅРєС†РёСЏ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РЅР°Р¶Р°С‚РёР№ РЅР° РЅРѕРІС‹Рµ РєРЅРѕРїРєРё
 void processNewButtonClick(int number, sf::Text& pressedNumberText, std::vector<sf::RectangleShape>& newButtons, std::vector<sf::Text>& newButtonTexts) {
     std::cout << "New button pressed with number " << number << std::endl;
     pressedNumberText.setString("New button pressed: " + std::to_string(number));
 
+    // РћС‡РёС‰Р°РµРј РЅРѕРІС‹Рµ РєРЅРѕРїРєРё Рё С‚РµРєСЃС‚С‹
     newButtons.clear();
     newButtonTexts.clear();
 
     std::cout << number;
 }
 int main() {
-    // Создаем окно
+    // РЎРѕР·РґР°РµРј РѕРєРЅРѕ
     sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "My window");
-   
+    //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML РљРЅРѕРїРєРё СЃ С‡РёСЃР»Р°РјРё");
     sf::Font font;
     if (!font.openFromFile("C:/Users/Masha/source/repos/sfmllll/Arial.ttf")) {
         std::cerr << "Failed to load font!" << std::endl;
         return -1;
     }
+    // Р—Р°РіСЂСѓР¶Р°РµРј С€СЂРёС„С‚
 
 
-
-    // Числа для наших кнопок
+    // Р§РёСЃР»Р° РґР»СЏ РЅР°С€РёС… РєРЅРѕРїРѕРє
     std::vector<int> numbers = { 1, 2, 3 };
 
-    // Создаем кнопки
+    // РЎРѕР·РґР°РµРј РєРЅРѕРїРєРё
     std::vector<sf::RectangleShape> buttons;
     std::vector<sf::Text> buttonTexts;
 
-    // Параметры кнопок
+    // РџР°СЂР°РјРµС‚СЂС‹ РєРЅРѕРїРѕРє
     const float buttonWidth = 100.f;
     const float buttonHeight = 50.f;
     const float padding = 20.f;
@@ -87,7 +87,7 @@ int main() {
 
 
     for (size_t i = 0; i < numbers.size(); ++i) {
-        // Создаем прямоугольник кнопки
+        // РЎРѕР·РґР°РµРј РїСЂСЏРјРѕСѓРіРѕР»СЊРЅРёРє РєРЅРѕРїРєРё
         sf::RectangleShape button(sf::Vector2f(buttonWidth, buttonHeight));
         button.setPosition({ startX + i * (buttonWidth + padding), startY });
         button.setFillColor(sf::Color::Green);
@@ -95,7 +95,7 @@ int main() {
         button.setOutlineColor(sf::Color::Black);
         buttons.push_back(button);
 
-        // Создаем текст для кнопки
+        // РЎРѕР·РґР°РµРј С‚РµРєСЃС‚ РґР»СЏ РєРЅРѕРїРєРё
         sf::Text text(font);
         text.setString(std::to_string(numbers[i]));
         text.setFont(font);
@@ -104,8 +104,9 @@ int main() {
 
 
 
-
-
+        //sf::RectangleShape rectangle({ 120.f, 50.f });
+        /*text.setOrigin( { startX + i * (buttonWidth + padding) + buttonWidth/2.f, startY + buttonHeight/2.f});
+        */
         if (i == 0) {
             text.setPosition({ startX + i * (buttonWidth + padding) + buttonWidth / 2.f
   ,
@@ -128,15 +129,19 @@ int main() {
 
     }
 
+    // Р“Р»Р°РІРЅС‹Р№ С†РёРєР» РїСЂРёР»РѕР¶РµРЅРёСЏ
     bool mouseWasPressed = false;
-
+    // РЎРѕР·РґР°РµРј СЃС‚Р°С‚РёС‡РµСЃРєРёРµ РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РЅРѕРІС‹С… РєРЅРѕРїРѕРє
     std::vector<sf::RectangleShape> newButtons;
     std::vector<sf::Text> newButtonTexts;
+    bool oldButtonsEnabled = true;
     while (window.isOpen())
     {
+
+        // check all the window's events that were triggered since the last iteration of the loop
         while (const std::optional event = window.pollEvent())
         {
-
+            // "close requested" event: we close the window
             if (event->is<sf::Event::Closed>())
                 window.close();
 
@@ -145,26 +150,33 @@ int main() {
                 mouseWasPressed = true;
             }
             if (event->is < sf::Event::MouseButtonReleased>() && mouseWasPressed) {
-                // Получаем позицию мыши
+                // РџРѕР»СѓС‡Р°РµРј РїРѕР·РёС†РёСЋ РјС‹С€Рё
                 sf::Vector2i localPosition = sf::Mouse::getPosition(window);
                 sf::Vector2f mousePos = window.mapPixelToCoords(
                     localPosition);
 
-                // Проверяем, какая кнопка была нажата
+                // РџСЂРѕРІРµСЂСЏРµРј, РєР°РєР°СЏ РєРЅРѕРїРєР° Р±С‹Р»Р° РЅР°Р¶Р°С‚Р°
 
-                for (size_t i = 0; i < buttons.size(); ++i) {
-                    if (buttons[i].getGlobalBounds().contains(mousePos)) {
-                        processNumber(numbers[i], pressedNumberText, newButtons, newButtonTexts, font); // Вызываем функцию с числом
-
+                if (oldButtonsEnabled) {
+                    for (size_t i = 0; i < buttons.size(); ++i) {
+                        if (buttons[i].getGlobalBounds().contains(mousePos)) {
+                            processNumber(numbers[i], pressedNumberText, newButtons, newButtonTexts, font);
+                            oldButtonsEnabled = false; // Р”РµР»Р°РµРј СЃС‚Р°СЂС‹Рµ РєРЅРѕРїРєРё РЅРµРґРѕСЃС‚СѓРїРЅС‹РјРё
+                        }
                     }
                 }
+                //for (size_t i = 0; i < buttons.size(); ++i) {
+                //    if (buttons[i].getGlobalBounds().contains(mousePos)) {
+                //        processNumber(numbers[i], pressedNumberText, newButtons, newButtonTexts, font); // Р’С‹Р·С‹РІР°РµРј С„СѓРЅРєС†РёСЋ СЃ С‡РёСЃР»РѕРј
 
-                // Проверяем нажатие на новые кнопки
+                //    }
+                //}
+                // РџСЂРѕРІРµСЂСЏРµРј РЅР°Р¶Р°С‚РёРµ РЅР° РЅРѕРІС‹Рµ РєРЅРѕРїРєРё
                 for (size_t i = 0; i < newButtons.size(); ++i) {
                     if (newButtons[i].getGlobalBounds().contains(mousePos)) {
-                        processNewButtonClick(i + 1, pressedNumberText, newButtons, newButtonTexts); // Передаем номер новой кнопки
+                        processNewButtonClick(i + 1, pressedNumberText, newButtons, newButtonTexts);
+                        oldButtonsEnabled = true; // РњРѕР¶РЅРѕ СЃРЅРѕРІР° СЃРґРµР»Р°С‚СЊ СЃС‚Р°СЂС‹Рµ РєРЅРѕРїРєРё РґРѕСЃС‚СѓРїРЅС‹РјРё РїСЂРё РЅР°Р¶Р°С‚РёРё РЅРѕРІРѕР№
                     }
-
                 }
             }
 
@@ -173,27 +185,49 @@ int main() {
 
         }
 
-        // Изменяем цвет кнопок при наведении
+        // РћР±СЂР°Р±РѕС‚РєР° РЅР°Р¶Р°С‚РёР№ РЅР° РєРЅРѕРїРєРё
+// РР·РјРµРЅСЏРµРј С†РІРµС‚ РєРЅРѕРїРѕРє РїСЂРё РЅР°РІРµРґРµРЅРёРё
         sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
         for (size_t i = 0; i < buttons.size(); ++i) {
             if (buttons[i].getGlobalBounds().contains(mousePos)) {
-                buttons[i].setFillColor(sf::Color(100, 200, 100)); // Светло-зеленый
+                buttons[i].setFillColor(sf::Color(100, 200, 100)); // РЎРІРµС‚Р»Рѕ-Р·РµР»РµРЅС‹Р№
             }
             else {
-                buttons[i].setFillColor(sf::Color::Green); // Обычный зеленый
+                buttons[i].setFillColor(sf::Color::Green); // РћР±С‹С‡РЅС‹Р№ Р·РµР»РµРЅС‹Р№
             }
         }
-
-        // Отрисовка
-        window.clear(sf::Color(50, 50, 50)); // Темный фон
-
-        for (size_t i = 0; i < buttons.size(); ++i) {
-            window.draw(buttons[i]);
-            window.draw(buttonTexts[i]);
+        
+        // РџРѕРґСЃРІРµС‚РєР° РЅРѕРІС‹С… РєРЅРѕРїРѕРє РїСЂРё РЅР°РІРµРґРµРЅРёРё РјС‹С€Рё
+        sf::Vector2f mousePos1 = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+        for (size_t i = 0; i < newButtons.size(); ++i) {
+            if (newButtons[i].getGlobalBounds().contains(mousePos1)) {
+                newButtons[i].setFillColor(sf::Color::Cyan); // РџРѕРґСЃРІРµС‚РєР°
+            }
+            else {
+                newButtons[i].setFillColor(sf::Color::Blue); // Р¦РІРµС‚ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+            }
         }
+        
+        // РћС‚СЂРёСЃРѕРІРєР°
+        window.clear(sf::Color(50, 50, 50)); // РўРµРјРЅС‹Р№ С„РѕРЅ
+        // Р РёСЃСѓРµРј РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅС‹Рµ РєРЅРѕРїРєРё РЅРµР·Р°РІРёСЃРёРјРѕ РѕС‚ РёС… СЃРѕСЃС‚РѕСЏРЅРёСЏ
+        for (const auto& button : buttons) {
+            window.draw(button);
+        }
+
+        // Р РёСЃСѓРµРј С‚РµРєСЃС‚ РЅР° РєРЅРѕРїРєР°С…
+        for (const auto& text : buttonTexts) {
+            window.draw(text);
+        }
+        //// Р РёСЃСѓРµРј РєРЅРѕРїРєРё Рё С‚РµРєСЃС‚
+        //for (size_t i = 0; i < buttons.size(); ++i) {
+        //    window.draw(buttons[i]);
+        //    window.draw(buttonTexts[i]);
+        //}
 
         window.draw(pressedNumberText);
 
+        //// Р РёСЃСѓРµРј РЅРѕРІС‹Рµ РєРЅРѕРїРєРё Рё РёС… С‚РµРєСЃС‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё РѕРЅРё Р±С‹Р»Рё СЃРѕР·РґР°РЅС‹
         for (auto& newButton : newButtons) {
             window.draw(newButton);
         }
@@ -201,7 +235,7 @@ int main() {
         {
             window.draw(newButtonText);
         }
-
+        //for (i = 0;i < 3, auto & newButtonText : newButtonTexts)
 
 
 
@@ -213,8 +247,3 @@ int main() {
     }
     return 0;
 }
-
-
-
-
-
