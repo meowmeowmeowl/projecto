@@ -5,6 +5,8 @@
 struct Action {
 	int days;
 	int number_action;
+	bool alive = 1;
+	std::string reason;
 	std::unordered_map<std::string, bool> tasks;
 	std::vector<int> important_days;
 	std::vector<int> achievement_days;
@@ -13,6 +15,7 @@ struct Action {
 	Action(Character* student) {
 		stud = student;
 		days = 0;
+		reason = "no";
 		end_semester = 30;
 		number_action = 0;
 		tasks["alive"] = 1;
@@ -25,23 +28,30 @@ struct Action {
 		}
 	}
 	void isalive() {
-		auto it = std::find_if(stud->stats.begin(), stud->stats.end(), [](const auto& pair) {
-			return pair.second == 0;
-			});
-		if (it != stud->stats.end()) {
-			youdead("character", stud);
+		for (auto& pair : stud->stats) {
+			if (pair.second == 0) {
+				alive = 0;
+				reason = pair.first;
+			}
 		}
 	}
 	void checkday() {
 		std::cout << "Deadline uiuiui" << std::endl;
 		if (stud->physic.value != stud->physic.maxx) {
-			youdead("physic", stud);
+			alive = 0;
+			reason = "physic";
 		}
 		stud->physic.value = 0;
 		if (stud->math.value != stud->math.maxx) {
-			youdead("math", stud);
+			alive = 0;
+			reason = "math";
 		}
 		stud->math.value = 0;
+		if (stud->proga.value != stud->proga.maxx) {
+			alive = 0;
+			reason = "proga";
+		}
+		stud->proga.value = 0;
 	}
 	void checkprivilege() {
 		std::unordered_map<std::string, int> priv;
@@ -73,9 +83,10 @@ struct Action {
 	void semester() {
 		std::cout << "o no end of semester" << std::endl;
 		if (stud->pe.value != stud->pe.maxx) {
-			youdead("pe", stud);
+			alive = 0;
+			reason = "pe";
 		}
-		youdead("no", stud);
+		alive = 0;
 	}
 	void pressthebutton() {
 		isalive();
@@ -83,7 +94,7 @@ struct Action {
 		if (number_action ==3) {
 			days += 1;
 			number_action = 0;
-			std::cout << "It is a new day" << "\n" << std::endl;
+			//std::cout << "It is a new day" << "\n" << std::endl;
 
 			int count = std::count(important_days.begin(), important_days.end(), days);
 			int cou = std::count(achievement_days.begin(), achievement_days.end(), days);
